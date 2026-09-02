@@ -3,7 +3,7 @@
 @use "../abstract/variables" as *;
 
 #itemDetailPage {
-	--card-width: 14vw;
+	--card-width: clamp(10rem, 14vw, 18rem);
 	display: flex;
 	flex-direction: column;
 	flex-wrap: nowrap;
@@ -115,8 +115,8 @@
 			}
 		}
 
-		&[title="Play"],
-		&[title="Resume"] {
+		&[data-action="play"],
+		&[data-action="resume"] {
 			background: white !important;
 			color: black;
 			padding: 0.4em 1em !important;
@@ -132,6 +132,7 @@
 				font-weight: 500;
 				height: fit-content;
 				font-size: 1.5em;
+				white-space: nowrap;
 				width: fit-content;
 			}
 			&:hover {
@@ -244,6 +245,74 @@
 		.detailRibbon {
 			height: 43vh;
 		}
+	}
+}
+
+// Jellyfin 10.11 moved the desktop poster out of `.infoWrapper` and made it a
+// sibling of `.detailRibbon`. Flatten the ribbon into a page-level grid so the
+// poster, metadata, actions and description retain the original JellySkin
+// composition without relying on the pre-10.11 DOM hierarchy.
+:is(.layout-desktop, .layout-tv) #itemDetailPage {
+	.detailPagePrimaryContainer {
+		display: grid;
+		grid-template-columns: var(--card-width) minmax(0, 1fr);
+		grid-template-areas:
+			"poster info"
+			"buttons buttons"
+			"content content";
+		column-gap: 2em;
+		row-gap: 1em;
+		width: 100%;
+
+		& > .detailImageContainer {
+			align-self: stretch;
+			grid-area: poster;
+			height: auto !important;
+			width: var(--card-width);
+
+			& > .card {
+				height: auto;
+				margin-bottom: 0 !important;
+				width: 100%;
+			}
+		}
+
+		& > .detailRibbon {
+			display: contents;
+
+			& > .infoWrapper {
+				grid-area: info;
+				grid-template-areas:
+					"text"
+					"info";
+				grid-template-columns: minmax(0, 1fr);
+				grid-template-rows: 1fr auto;
+				height: 100%;
+				min-width: 0;
+			}
+
+			& > .mainDetailButtons {
+				grid-area: buttons;
+				margin: 0;
+			}
+		}
+
+		& > .detailPagePrimaryContent {
+			grid-area: content;
+			padding: 0 !important;
+			width: 100%;
+		}
+	}
+}
+
+@media (max-width: 60em) {
+	:is(.layout-desktop, .layout-tv) #itemDetailPage .detailSection {
+		grid-template-areas:
+			"content"
+			"selector"
+			"detailGroup"
+			"recording";
+		grid-template-columns: minmax(0, 1fr);
 	}
 }
 

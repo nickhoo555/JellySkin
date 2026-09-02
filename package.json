@@ -1,6 +1,6 @@
 {
 	"name": "jellyskin",
-	"version": "12.5.1",
+	"version": "13.0.0",
 	"description": "A vibrant skin for jellyfin made with SASS",
 	"files": [
 		"/dist"
@@ -9,8 +9,9 @@
 	"scripts": {
 		"watch:sass": "sass --watch src/:dev/ src/addons/:dev/addons/",
 		"serve": "browser-sync start --server --files 'dev' 'src'",
-		"build": "sass src/:dist/ src/addons/:dist/addons/",
-		"postbuild": "postcss dist/*.css -u autoprefixer cssnano -r",
+		"build": "sass --no-source-map src/:dist/ src/addons/:dist/addons/",
+		"postbuild": "postcss dist/*.css -u autoprefixer cssnano --no-map -r",
+		"check": "pnpm run build && git diff --exit-code -- dist",
 		"start": "npm-run-all --parallel watch:sass serve",
 		"pub:prerelease": "np prerelease --no-tests --tag nightly --branch master",
 		"pub:patch": "np patch --no-tests --tag latest --branch master",
@@ -32,9 +33,10 @@
 		"postcss-cli": "^9.1.0",
 		"sass": "^1.49.8"
 	},
+	"packageManager": "pnpm@11.14.0",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/prayag17/JellySkin.git"
+		"url": "git+https://github.com/nickhoo555/JellySkin.git"
 	},
 	"keywords": [
 		"jellyfin",
@@ -44,7 +46,7 @@
 	"author": "prayag17",
 	"license": "GPL-3.0-only",
 	"bugs": {
-		"url": "https://github.com/prayag17/JellySkin/issues"
+		"url": "https://github.com/nickhoo555/JellySkin/issues"
 	},
-	"homepage": "https://github.com/prayag17/JellySkin#readme"
+	"homepage": "https://github.com/nickhoo555/JellySkin#readme"
 }

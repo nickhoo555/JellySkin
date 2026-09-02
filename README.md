@@ -1,25 +1,27 @@
 # JellySkin
 
-### over engineered css theme for Jellyfin
-  
-![npm (tag)](https://img.shields.io/npm/v/jellyskin/latest?style=for-the-badge) ![jsDelivr hits (npm)](https://img.shields.io/jsdelivr/npm/hm/jellyskin?label=Downloads&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/prayag17/JellySkin?style=for-the-badge)\
-![GitHub Repo stars](https://img.shields.io/github/stars/prayag17/JellySkin?style=social)
+### Over-engineered CSS theme for Jellyfin
+
+![Jellyfin 10.11](https://img.shields.io/badge/Jellyfin-10.11-00a4dc?style=for-the-badge) ![GitHub release](https://img.shields.io/github/v/release/nickhoo555/JellySkin?style=for-the-badge) ![GitHub](https://img.shields.io/github/license/nickhoo555/JellySkin?style=for-the-badge)
+
+> [!NOTE]
+> This fork adds support for Jellyfin Web 10.11 and is verified against 10.11.6. It is based on [prayag17/JellySkin](https://github.com/prayag17/JellySkin), whose latest v12.5.1 release targets Jellyfin 10.9.
 
 # ℹ️ Usage
 
 > [!IMPORTANT]
 > JellySkin requires Chrome (105 and above), Edge (105 and above), Safari (15.4 and above), Firefox (121 and above), Opera (91 and above) and any other Browser supporting Baseline 23 css features to work properly
 
-- To use the JellySkin theme copy the line below into "Dashboard -> General -> Custom CSS" and click save, it will apply immediately server-wide to all users on top of any theme they may be using. To remove the theme, clear the "Custom CSS" field and then click save. <b>NOTE: Theme may not work when using Nginx Reverse Proxy. Scroll down below to learn how to fix this.
+- To use the JellySkin theme copy the line below into "Dashboard -> Branding -> Custom CSS" and click save, it will apply immediately server-wide to all users on top of any theme they may be using. To remove the theme, clear the "Custom CSS" field and then click save. <b>NOTE: Theme may not work when using Nginx Reverse Proxy. Scroll down below to learn how to fix this.
 
   ```css
-  @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/main.css");
+  @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/main.css");
   ```
 
 - To enable Logos add this to custom css:
 
   ```css
-  @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/logo.css");
+  @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/logo.css");
   ```
   
 - You can also use Jellyfin-Skin-Manager-Plugin : <https://github.com/danieladov/jellyfin-plugin-skin-manager>
@@ -35,7 +37,7 @@
   This removes the frosted glass like effect from every place and improves performance
 
     ```css
-    @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/addons/improvePerformance/removeBackdropFilter.css");
+    @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/addons/improvePerformance/removeBackdropFilter.css");
     ```
 
 - ### Remove scroll fade
@@ -43,7 +45,7 @@
   This removes the gradient faded bar at top of a scrollable container
 
     ```css
-    @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/addons/improvePerformance/removeFadingScroll.css");
+    @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/addons/improvePerformance/removeFadingScroll.css");
     ```
 
 - ## Horizontal My Media
@@ -51,7 +53,7 @@
     Brings back the horizontal section for My Media
 
     ```css
-    @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/addons/horizontalMyMedia.css");
+    @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/addons/horizontalMyMedia.css");
     ```
 
 - ## Using/Changing default gradient accent
@@ -62,7 +64,7 @@
     - ### Mauve
 
       ```css
-      @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/addons/gradients/mauve.css");
+      @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/addons/gradients/mauve.css");
       ```
 
       Example:\
@@ -71,7 +73,7 @@
   - ### NightSky
 
       ```css
-      @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/addons/gradients/nightSky.css");
+      @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/addons/gradients/nightSky.css");
       ```
 
       Example:\
@@ -80,7 +82,7 @@
   - ### Sea
 
       ```css
-      @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/addons/gradients/sea.css");
+      @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/addons/gradients/sea.css");
       ```
 
       Example:\
@@ -106,7 +108,7 @@
     If you are adding this to the serverwide Custom CSS, users can remove the effect using the *Remove Backdrop Filter* addon above.
 
     ```css
-    @import url("https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/addons/videoThemeBlur.css");
+    @import url("https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/addons/videoThemeBlur.css");
     ```
 
 # 💻 Screenshots
@@ -159,14 +161,14 @@
   becomes (with only adding the default style):
 
   ```shell
-  add_header Content-Security-Policy "default-src https: data: blob: http://image.tmdb.org; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/jellyskin@latest/dist/main.css; script-src 'self' 'unsafe-inline' https://www.gstatic.com/cv/js/sender/v1/cast_sender.js https://www.youtube.com blob:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'self'";
+  add_header Content-Security-Policy "default-src https: data: blob: http://image.tmdb.org; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net/gh/nickhoo555/JellySkin@v13.0.0/dist/main.css; script-src 'self' 'unsafe-inline' https://www.gstatic.com/cv/js/sender/v1/cast_sender.js https://www.youtube.com blob:; worker-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'self'";
   ```
 
   If you don't do this the theme will simply not load (reverts back to default theme) and the browser console will spit out an error. Even if you paste in all the CSS, the font will still not load since it is loaded from a disallowed external source.
 
 - ### How to report a Bug or request a Feature?
 
-  - Go to <https://github.com/prayag17/JellySkin/issues>
+  - Go to <https://github.com/nickhoo555/JellySkin/issues>
   - Click on `New Issue` button
   - Select the appropriate template
 

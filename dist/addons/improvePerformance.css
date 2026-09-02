@@ -1,0 +1,9 @@
+/** @format */
+/** @format */
+:root {
+  --accent1-light: hsl(285, 46%, 56%);
+  --accent1-dark: hsl(285, 35%, 21%);
+  --accent1-light-opacity1: hsla(285, 46%, 56%, 0.4);
+  --accent2-light: hsl(195, 100%, 43%);
+  --accent2-dark: hsl(195, 100%, 16%);
+}
