@@ -498,3 +498,296 @@
 		}
 	}
 }
+
+// Jellyfin can keep `layout-desktop` at narrow browser widths. Use viewport
+// breakpoints as the source of truth so detail pages remain usable in split
+// windows, tablets and phones regardless of the layout class selected by Web.
+@media (max-width: 60em) {
+	#itemDetailPage {
+		--card-width: clamp(9rem, 22vw, 12rem);
+		padding: clamp(1.25rem, 4vw, 2rem) !important;
+
+		.itemBackdrop {
+			position: absolute !important;
+			top: 0;
+			left: 0;
+			width: 100vw !important;
+			height: min(56vh, 32rem) !important;
+			margin: 0 !important;
+			filter: brightness(65%);
+			mask-image: linear-gradient(to bottom, black, transparent);
+			-webkit-mask-image: linear-gradient(to bottom, black, transparent);
+		}
+
+		.detailPageWrapperContainer,
+		.detailPagePrimaryContainer,
+		.detailPagePrimaryContent,
+		.detailSection,
+		.detailSectionContent,
+		.trackSelections,
+		.itemDetailsGroup {
+			min-width: 0;
+			width: 100%;
+		}
+
+		.detailPageWrapperContainer {
+			position: relative;
+			z-index: 1;
+		}
+
+		.detailImageContainer .card {
+			width: 100% !important;
+			max-width: 100% !important;
+		}
+
+		.infoWrapper {
+			min-width: 0;
+
+			.itemName {
+				font-size: clamp(2.25rem, 7vw, 4rem);
+				line-height: 1.1;
+				overflow-wrap: anywhere;
+
+				&.subtitle {
+					font-size: clamp(1.25rem, 3.8vw, 2rem);
+					line-height: 1.2;
+				}
+			}
+		}
+
+		.nameContainer,
+		.itemMiscInfo {
+			min-width: 0;
+			flex-wrap: wrap;
+		}
+
+		.nameContainer .infoText {
+			white-space: normal;
+			text-overflow: clip;
+			overflow: visible;
+			-webkit-line-clamp: unset;
+		}
+
+		.mainDetailButtons {
+			display: flex;
+			flex: none;
+			flex-wrap: wrap;
+			gap: 0.5rem !important;
+			width: 100%;
+			min-width: 0;
+
+			.emby-button {
+				min-width: 2.75rem;
+				min-height: 2.75rem;
+				margin: 0 !important;
+			}
+		}
+
+		.detailSection {
+			grid-template-areas:
+				"content"
+				"selector"
+				"detailGroup"
+				"recording";
+			grid-template-columns: minmax(0, 1fr);
+			gap: clamp(1.25rem, 4vw, 2rem);
+		}
+
+		.overview,
+		.detailsGroupItem,
+		.infoText {
+			max-width: 100%;
+			overflow-wrap: anywhere;
+		}
+
+		.trackSelectionFieldContainer {
+			width: 100%;
+			min-width: 0;
+
+			.selectLabel {
+				flex: 0 0 clamp(4.5rem, 14vw, 6rem);
+				min-width: 0;
+			}
+
+			.emby-select {
+				flex: 1 1 auto;
+				width: auto !important;
+				min-width: 0;
+			}
+		}
+	}
+
+	#itemDetailPage:has(.parentName a[data-type="Series"]):not(:has(.listItem)) {
+		--card-width: clamp(12rem, 36vw, 22rem);
+
+		.detailPagePrimaryContainer {
+			margin-top: 0;
+		}
+
+		.detailRibbon {
+			height: auto;
+		}
+
+		.infoWrapper .itemName {
+			font-size: clamp(2rem, 5vw, 3rem);
+
+			&.subtitle {
+				font-size: clamp(1.25rem, 3vw, 1.75rem);
+			}
+		}
+	}
+
+	:is(.layout-desktop, .layout-tv) #itemDetailPage {
+		.detailPagePrimaryContainer {
+			grid-template-columns: var(--card-width) minmax(0, 1fr);
+			column-gap: clamp(1.25rem, 4vw, 2rem);
+		}
+	}
+
+	.layout-mobile #itemDetailPage {
+		--card-width: clamp(9rem, 22vw, 12rem);
+
+		.detailRibbon {
+			height: auto;
+			min-height: 0;
+			margin: 0 !important;
+			align-items: stretch;
+			justify-content: flex-start;
+		}
+
+		.infoWrapper {
+			display: grid;
+			grid-template-areas:
+				"img text"
+				"img info";
+			grid-template-columns: var(--card-width) minmax(0, 1fr);
+			grid-template-rows: 1fr auto;
+			column-gap: clamp(1.25rem, 4vw, 2rem);
+			row-gap: 0.75rem;
+			align-items: end;
+			width: 100%;
+		}
+
+		.detailImageContainer {
+			width: var(--card-width);
+
+			.card {
+				width: 100%;
+				max-width: 100% !important;
+				min-width: 0 !important;
+			}
+		}
+
+		.mainDetailButtons {
+			flex-basis: auto;
+			font-size: inherit;
+		}
+	}
+}
+
+@media (max-width: 40em) {
+	#itemDetailPage {
+		--card-width: min(52vw, 11rem);
+		padding: 1rem !important;
+
+		.infoWrapper {
+			.itemName {
+				font-size: clamp(2rem, 9vw, 2.75rem);
+
+				&.subtitle {
+					font-size: clamp(1.2rem, 5.5vw, 1.6rem);
+				}
+			}
+		}
+
+		.nameContainer {
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+
+			.infoText {
+				width: 100% !important;
+				text-align: center;
+			}
+		}
+
+		.itemMiscInfo {
+			justify-content: center;
+			text-align: center;
+		}
+
+		.parentName,
+		.parentName a {
+			width: 100%;
+			text-align: center;
+		}
+
+		.mainDetailButtons {
+			justify-content: center;
+
+			.emby-button[data-action="play"],
+			.emby-button[data-action="resume"] {
+				flex: 1 0 100%;
+				width: 100%;
+				max-width: 100%;
+			}
+		}
+
+		.detailPagePrimaryContent {
+			margin-top: 0.25rem;
+		}
+
+		.detailSection {
+			margin-top: 0;
+			font-size: 1em;
+		}
+	}
+
+	#itemDetailPage:has(.parentName a[data-type="Series"]):not(:has(.listItem)) {
+		--card-width: min(84vw, 22rem);
+	}
+
+	:is(.layout-desktop, .layout-tv) #itemDetailPage {
+		.detailPagePrimaryContainer {
+			grid-template-areas:
+				"poster"
+				"info"
+				"buttons"
+				"content";
+			grid-template-columns: minmax(0, 1fr);
+			row-gap: 1rem;
+
+			& > .detailImageContainer {
+				justify-self: center;
+				width: var(--card-width);
+			}
+
+			& > .detailRibbon > .infoWrapper {
+				grid-template-rows: auto auto;
+				height: auto;
+				row-gap: 0.75rem;
+				text-align: center;
+			}
+		}
+	}
+
+	.layout-mobile #itemDetailPage {
+		--card-width: min(52vw, 11rem);
+
+		.infoWrapper {
+			grid-template-areas:
+				"img"
+				"text"
+				"info";
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: auto auto auto;
+			justify-items: center;
+			row-gap: 0.75rem;
+		}
+
+		.detailImageContainer {
+			justify-self: center;
+		}
+	}
+}
