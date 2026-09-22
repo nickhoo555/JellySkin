@@ -80,6 +80,37 @@ if (!episodeTabletBody) {
 	throw new Error("Missing the iPad-class episode detail-page media block");
 }
 
+requireDeclaration(
+	episodeTabletBody,
+	":is(.layout-desktop,.layout-tv) #itemDetailPage .detailPagePrimaryContainer",
+	"grid-template-areas",
+	'"poster info" "poster content" "buttons buttons"',
+);
+requireDeclaration(
+	episodeTabletBody,
+	":is(.layout-desktop,.layout-tv) #itemDetailPage .detailPagePrimaryContainer>.detailPagePrimaryContent .detailSection",
+	"grid-template-columns",
+	"minmax(0,1fr) minmax(15rem,40%)",
+);
+requireDeclaration(
+	episodeTabletBody,
+	".layout-mobile #itemDetailPage .detailPagePrimaryContainer",
+	"grid-template-areas",
+	'"poster name" "poster info" "poster content" "buttons buttons"',
+);
+requireDeclaration(
+	episodeTabletBody,
+	".layout-mobile #itemDetailPage .detailPagePrimaryContainer>.detailRibbon,.layout-mobile #itemDetailPage .detailPagePrimaryContainer>.detailRibbon>.infoWrapper",
+	"display",
+	"contents",
+);
+requireDeclaration(
+	episodeTabletBody,
+	".layout-mobile #itemDetailPage .detailPagePrimaryContainer>.detailPagePrimaryContent",
+	"grid-area",
+	"content",
+);
+
 const episodeSelector =
 	'.layout-mobile #itemDetailPage:has(.parentName a[data-type=Series]):not(:has(.listItem))';
 

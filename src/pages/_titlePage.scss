@@ -799,6 +799,94 @@
 // legacy mobile episode rule stores `--card-width: 100%` on the ribbon itself,
 // which otherwise overrides the tablet value inherited from the page.
 @media (min-width: 40.01em) and (max-width: 75em) {
+	// Tablet landscape has enough horizontal room for a complete information
+	// column. Keep the poster and play button on the left, then stack metadata
+	// and the primary detail content on its right instead of wasting the upper
+	// half of that column and pushing the description below the poster.
+	:is(.layout-desktop, .layout-tv) #itemDetailPage {
+		.detailPagePrimaryContainer {
+			grid-template-areas:
+				"poster info"
+				"poster content"
+				"buttons buttons";
+			grid-template-rows: auto auto auto;
+			align-items: start;
+
+			& > .detailImageContainer {
+				align-self: start;
+			}
+
+			& > .detailRibbon > .infoWrapper {
+				align-content: start;
+				align-items: start;
+				grid-template-rows: auto auto;
+				height: auto;
+				min-height: clamp(15rem, 22vw, 17rem);
+			}
+
+			& > .detailPagePrimaryContent {
+				align-self: start;
+
+				.detailSection {
+					grid-template-areas:
+						"content selector"
+						"detailGroup detailGroup"
+						"recording recording";
+					grid-template-columns: minmax(0, 1fr) minmax(15rem, 40%);
+					gap: clamp(1rem, 2.5vw, 2rem);
+				}
+			}
+		}
+	}
+
+	// Jellyfin uses a different nested poster node for touch layouts. Flatten
+	// those two structural wrappers at tablet sizes so the same visual grid can
+	// be composed without changing Jellyfin's DOM.
+	.layout-mobile #itemDetailPage .detailPagePrimaryContainer {
+		display: grid;
+		grid-template-columns: var(--card-width) minmax(0, 1fr);
+		grid-template-areas:
+			"poster name"
+			"poster info"
+			"poster content"
+			"buttons buttons";
+		grid-template-rows: auto auto minmax(0, 1fr) auto;
+		column-gap: clamp(1.25rem, 4vw, 2rem);
+		row-gap: 0.75rem;
+		align-items: start;
+		width: 100%;
+
+		& > .detailRibbon,
+		& > .detailRibbon > .infoWrapper {
+			display: contents;
+		}
+
+		& > .detailRibbon > .infoWrapper > .detailImageContainer {
+			grid-area: poster;
+			align-self: start;
+		}
+
+		& > .detailRibbon > .infoWrapper > .nameContainer {
+			grid-area: name;
+			align-self: start;
+		}
+
+		& > .detailRibbon > .infoWrapper > .itemMiscInfo-primary {
+			grid-area: info;
+			align-self: start;
+		}
+
+		& > .detailRibbon > .mainDetailButtons {
+			grid-area: buttons;
+		}
+
+		& > .detailPagePrimaryContent {
+			grid-area: content;
+			align-self: start;
+			padding: 0 !important;
+		}
+	}
+
 	.layout-mobile
 		#itemDetailPage:has(.parentName a[data-type="Series"]):not(:has(.listItem)) {
 		.detailRibbon {
