@@ -305,7 +305,7 @@
 	}
 }
 
-@media (max-width: 60em) {
+@media (max-width: 75em) {
 	:is(.layout-desktop, .layout-tv) #itemDetailPage .detailSection {
 		grid-template-areas:
 			"content"
@@ -502,7 +502,7 @@
 // Jellyfin can keep `layout-desktop` at narrow browser widths. Use viewport
 // breakpoints as the source of truth so detail pages remain usable in split
 // windows, tablets and phones regardless of the layout class selected by Web.
-@media (max-width: 60em) {
+@media (max-width: 75em) {
 	#itemDetailPage {
 		--card-width: clamp(9rem, 22vw, 12rem);
 		padding: clamp(1.25rem, 4vw, 2rem) !important;
@@ -648,15 +648,18 @@
 		--card-width: clamp(9rem, 22vw, 12rem);
 
 		.detailRibbon {
+			flex-direction: column;
 			height: auto;
 			min-height: 0;
 			margin: 0 !important;
 			align-items: stretch;
 			justify-content: flex-start;
+			width: 100%;
 		}
 
 		.infoWrapper {
 			display: grid;
+			flex-basis: auto;
 			grid-template-areas:
 				"img text"
 				"img info";
@@ -788,6 +791,24 @@
 
 		.detailImageContainer {
 			justify-self: center;
+		}
+	}
+}
+
+// Jellyfin marks iPad-class touch layouts as mobile even in landscape. The
+// legacy mobile episode rule stores `--card-width: 100%` on the ribbon itself,
+// which otherwise overrides the tablet value inherited from the page.
+@media (min-width: 40.01em) and (max-width: 75em) {
+	.layout-mobile
+		#itemDetailPage:has(.parentName a[data-type="Series"]):not(:has(.listItem)) {
+		.detailRibbon {
+			--card-width: clamp(12rem, 36vw, 22rem);
+		}
+
+		.detailRibbon .detailImageContainer .card {
+			width: 100% !important;
+			max-width: 100% !important;
+			min-width: 0 !important;
 		}
 	}
 }

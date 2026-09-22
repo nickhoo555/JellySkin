@@ -1,0 +1,66 @@
+<!doctype html>
+<html class="layout-mobile">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../dist/main.css" />
+		<style>
+			* { box-sizing: border-box; }
+			html, body { width: 100%; height: 100%; margin: 0; font-size: 16px; }
+			#itemDetailPage { position: relative; width: 100%; height: 100%; }
+			.detailPageWrapperContainer,
+			.detailPagePrimaryContainer,
+			.detailRibbon { width: 100%; }
+			.detailImageContainer .card { aspect-ratio: 16 / 9; background: #888; }
+			.infoText { font-family: sans-serif; }
+			#result { position: fixed; inset: auto 0 0; margin: 0; background: white; color: black; }
+		</style>
+	</head>
+	<body>
+		<div id="itemDetailPage">
+			<div class="detailPageWrapperContainer">
+				<div class="detailPagePrimaryContainer">
+					<div class="detailRibbon">
+						<div class="infoWrapper">
+							<div class="detailImageContainer">
+								<div class="card"></div>
+							</div>
+							<div class="nameContainer">
+								<div class="parentName"><a data-type="Series">匹兹堡医护前线</a></div>
+								<div class="infoText itemName">匹兹堡医护前线</div>
+								<div class="infoText itemName subtitle">第 1 季 · 长标题测试</div>
+							</div>
+							<div class="itemMiscInfo itemMiscInfo-primary">2025 · 50m · 8.3</div>
+						</div>
+						<div class="mainDetailButtons">
+							<button class="emby-button" data-action="play" title="播放">播放</button>
+							<button class="emby-button">收藏</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<pre id="result">PENDING</pre>
+		<script>
+			addEventListener("load", () => requestAnimationFrame(() => {
+				const ribbon = document.querySelector(".detailRibbon");
+				const info = document.querySelector(".infoWrapper");
+				const card = document.querySelector(".card");
+				const name = document.querySelector(".nameContainer");
+				const metrics = {
+					viewport: [innerWidth, innerHeight],
+					ribbonDirection: getComputedStyle(ribbon).flexDirection,
+					infoFlexBasis: getComputedStyle(info).flexBasis,
+					cardWidth: Math.round(card.getBoundingClientRect().width),
+					nameWidth: Math.round(name.getBoundingClientRect().width),
+				};
+				const minimumNameWidth = innerWidth <= 640 ? 200 : 280;
+				const pass = metrics.ribbonDirection === "column"
+					&& metrics.infoFlexBasis === "auto"
+					&& metrics.cardWidth <= 400
+					&& metrics.nameWidth >= minimumNameWidth;
+				document.querySelector("#result").textContent = `${pass ? "PASS" : "FAIL"} ${JSON.stringify(metrics)}`;
+			}));
+		</script>
+	</body>
+</html>
