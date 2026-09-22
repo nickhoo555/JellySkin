@@ -1,0 +1,79 @@
+<!doctype html>
+<html class="layout-desktop">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../dist/main.css" />
+		<style>
+			* { box-sizing: border-box; }
+			html, body { width: 100%; min-height: 100%; margin: 0; font-size: 14.88px; }
+			#itemDetailPage { position: relative; width: 100%; min-height: 100%; }
+			.detailImageContainer .card { aspect-ratio: 2 / 3; background: #888; }
+			.infoText, .detailSection { font-family: sans-serif; }
+			.nameContainer { min-height: 7rem; }
+			.itemMiscInfo { min-height: 2rem; }
+			.mainDetailButtons { min-height: 4rem; }
+			.detailSectionContent { min-height: 8rem; }
+			.trackSelections { min-height: 6rem; }
+			#result { position: fixed; inset: auto 0 0; margin: 0; background: white; color: black; z-index: 9; }
+		</style>
+	</head>
+	<body>
+		<div id="itemDetailPage">
+			<div class="detailPageWrapperContainer">
+				<div class="detailPagePrimaryContainer">
+					<div class="detailImageContainer hide-mobile"><div class="card portraitCard"></div></div>
+					<div class="detailRibbon">
+						<div class="infoWrapper">
+							<div class="nameContainer">
+								<h1 class="parentName"><a data-type="Series">匹兹堡医护前线</a></h1>
+								<h3 class="itemName infoText subtitle">第 1 季 - 3. 早上9点</h3>
+							</div>
+							<div class="itemMiscInfo itemMiscInfo-primary">2025/1/16　50m　★ 8.2　结束于 21:54</div>
+						</div>
+						<div class="mainDetailButtons">
+							<button class="emby-button" data-action="play" title="播放">播放</button>
+							<button class="emby-button">收藏</button>
+						</div>
+					</div>
+					<div class="detailPagePrimaryContent padded-right">
+						<div class="detailSection">
+							<form class="trackSelections">
+								<div>视频　4K HEVC SDR</div><div>音频　English 5.1</div><div>字幕　简体中文</div>
+							</form>
+							<div class="detailSectionContent">
+								<p class="overview">萨蜜拉竭力将惠特克导上正轨。青少年滥用药物事件导致急诊室内发生冲突。</p>
+								<div class="itemExternalLinks">TMDB</div>
+							</div>
+							<div class="itemDetailsGroup"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<pre id="result">PENDING</pre>
+		<script>
+			addEventListener("load", () => requestAnimationFrame(() => {
+				const box = (selector) => {
+					const rect = document.querySelector(selector).getBoundingClientRect();
+					return { x: Math.round(rect.x), y: Math.round(rect.y), w: Math.round(rect.width), h: Math.round(rect.height), right: Math.round(rect.right), bottom: Math.round(rect.bottom) };
+				};
+				const metrics = {
+					viewport: [innerWidth, innerHeight],
+					poster: box(".detailPagePrimaryContainer > .detailImageContainer"),
+					name: box(".nameContainer"),
+					play: box(".mainDetailButtons [data-action=\"play\"]"),
+					content: box(".detailPagePrimaryContent"),
+				};
+				const pass = metrics.name.x >= metrics.poster.right
+					&& metrics.name.y <= metrics.poster.y + metrics.poster.h * 0.55
+					&& metrics.content.x >= metrics.poster.right
+					&& metrics.content.y < metrics.poster.bottom
+					&& metrics.play.x === metrics.poster.x
+					&& metrics.play.w <= metrics.poster.w + 2
+					&& metrics.play.y <= metrics.poster.bottom + 20;
+				document.querySelector("#result").textContent = `${pass ? "PASS" : "FAIL"} ${JSON.stringify(metrics)}`;
+			}));
+		</script>
+	</body>
+</html>

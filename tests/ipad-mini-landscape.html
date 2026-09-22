@@ -37,6 +37,12 @@
 							<button class="emby-button">收藏</button>
 						</div>
 					</div>
+					<div class="detailPagePrimaryContent">
+						<div class="detailSection">
+							<div class="detailSectionContent"><p class="overview">剧情简介用于验证封面右侧的空间得到利用。</p></div>
+							<form class="trackSelections">视频　音频　字幕</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -47,18 +53,30 @@
 				const info = document.querySelector(".infoWrapper");
 				const card = document.querySelector(".card");
 				const name = document.querySelector(".nameContainer");
+				const content = document.querySelector(".detailPagePrimaryContent");
+				const cardRect = card.getBoundingClientRect();
+				const contentRect = content.getBoundingClientRect();
 				const metrics = {
 					viewport: [innerWidth, innerHeight],
 					ribbonDirection: getComputedStyle(ribbon).flexDirection,
 					infoFlexBasis: getComputedStyle(info).flexBasis,
 					cardWidth: Math.round(card.getBoundingClientRect().width),
 					nameWidth: Math.round(name.getBoundingClientRect().width),
+					contentX: Math.round(contentRect.x),
+					contentY: Math.round(contentRect.y),
+					cardRight: Math.round(cardRect.right),
+					cardBottom: Math.round(cardRect.bottom),
 				};
 				const minimumNameWidth = innerWidth <= 640 ? 200 : 280;
+				const usesRightColumn = innerWidth > 640;
 				const pass = metrics.ribbonDirection === "column"
 					&& metrics.infoFlexBasis === "auto"
 					&& metrics.cardWidth <= 400
-					&& metrics.nameWidth >= minimumNameWidth;
+					&& metrics.nameWidth >= minimumNameWidth
+					&& (!usesRightColumn || (
+						metrics.contentX >= metrics.cardRight
+						&& metrics.contentY < metrics.cardBottom + (innerWidth > innerHeight ? 0 : 100)
+					));
 				document.querySelector("#result").textContent = `${pass ? "PASS" : "FAIL"} ${JSON.stringify(metrics)}`;
 			}));
 		</script>
