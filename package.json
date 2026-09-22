@@ -1,6 +1,6 @@
 {
 	"name": "jellyskin",
-	"version": "13.1.0",
+	"version": "13.1.1",
 	"description": "A vibrant skin for jellyfin made with SASS",
 	"files": [
 		"/dist"
@@ -11,7 +11,8 @@
 		"serve": "browser-sync start --server --files 'dev' 'src'",
 		"build": "sass --no-source-map src/:dist/ src/addons/:dist/addons/",
 		"postbuild": "postcss dist/*.css -u autoprefixer cssnano --no-map -r",
-		"check": "pnpm run build && git diff --exit-code -- dist",
+		"check": "pnpm run build && pnpm run check:responsive && git diff --exit-code -- dist",
+		"check:responsive": "node scripts/check-responsive.mjs",
 		"start": "npm-run-all --parallel watch:sass serve",
 		"pub:prerelease": "np prerelease --no-tests --tag nightly --branch master",
 		"pub:patch": "np patch --no-tests --tag latest --branch master",
