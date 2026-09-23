@@ -2,6 +2,10 @@ import { readFileSync } from "node:fs";
 
 const cssPath = process.argv[2] ?? new URL("../dist/main.css", import.meta.url);
 const css = readFileSync(cssPath, "utf8");
+const horizontalMyMediaCss = readFileSync(
+	new URL("../dist/addons/horizontalMyMedia.css", import.meta.url),
+	"utf8",
+);
 
 function mediaBodies(condition) {
 	const marker = `@media ${condition}{`;
@@ -51,6 +55,39 @@ function requireDeclaration(body, selector, property, expected) {
 			`${selector} must set ${property}:${expected}; received ${actual ?? "<missing>"}`,
 		);
 	}
+}
+
+requireDeclaration(
+	css,
+	"#indexPage .section0 .itemsContainer",
+	"display",
+	"grid",
+);
+requireDeclaration(
+	css,
+	"#indexPage .section0 .itemsContainer",
+	"grid-template-columns",
+	"repeat(auto-fit,minmax(min(16rem,100%),1fr))",
+);
+requireDeclaration(
+	css,
+	"#indexPage .section0 .itemsContainer>.card",
+	"width",
+	"100%",
+);
+if (
+	!/#indexPage\s+\.section0\s+\.itemsContainer\s*\{[^}]*display:\s*flex\s*!important/.test(
+		horizontalMyMediaCss,
+	)
+) {
+	throw new Error("horizontalMyMedia must restore the flex scroller");
+}
+if (
+	!/#indexPage\s+\.section0\s+\.itemsContainer\s*>\s*\.card\s*\{[^}]*width:\s*auto\s*!important/.test(
+		horizontalMyMediaCss,
+	)
+) {
+	throw new Error("horizontalMyMedia must override the grid card width");
 }
 
 const tabletBody = mediaBodies("(max-width:75em)").find((body) =>

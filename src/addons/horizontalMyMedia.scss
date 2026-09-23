@@ -1,7 +1,19 @@
 /** @format */
 
 #indexPage .section0 .itemsContainer {
+	display: flex !important;
 	flex-wrap: nowrap !important;
+	gap: 0;
+	white-space: nowrap !important;
+
+	& > .card {
+		flex: 0 0 clamp(16rem, 30vw, 24rem);
+		width: auto !important;
+
+		.cardBox {
+			margin: 0.5em 1.5em 1.5em 0 !important;
+		}
+	}
 }
 
 #indexPage .section0 .emby-scrollbuttons {
