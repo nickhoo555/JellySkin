@@ -1,0 +1,73 @@
+<!doctype html>
+<html class="layout-desktop">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<style>
+			* { box-sizing: border-box; }
+			html, body { width: 100%; min-height: 100%; margin: 0; font-size: 16px; }
+			#indexPage { padding: 3rem; }
+			.itemsContainer { display: flex; width: 100%; }
+			.card { flex: 0 0 auto; }
+			.cardBox { height: 10rem; }
+			.overflowBackdropCard, .overflowSmallBackdropCard { width: 72vw; }
+			@media (min-width: 35em) { .overflowBackdropCard { width: 45.5vw; } }
+			@media (min-width: 48.125em) { .overflowBackdropCard, .overflowSmallBackdropCard { width: 30vw; } }
+			@media (orientation: landscape) { .overflowBackdropCard, .overflowSmallBackdropCard { width: 30vw; } }
+			@media (orientation: landscape) and (min-width: 48.125em) { .overflowBackdropCard, .overflowSmallBackdropCard { width: 23.1vw; } }
+			@media (min-width: 75em) { .overflowBackdropCard, .overflowSmallBackdropCard { width: 23.1vw; } }
+			#result { position: fixed; inset: auto 0 0; margin: 0; background: white; color: black; z-index: 9; }
+		</style>
+		<link rel="stylesheet" href="../dist/main.css" />
+	</head>
+	<body>
+		<div id="indexPage">
+			<div id="homeTab">
+				<div class="sections homeSectionsContainer">
+					<div class="verticalSection section0">
+						<h2>我的媒体</h2>
+						<div class="itemsContainer scrollSlider focuscontainer-x animatedScrollX">
+							<div class="card overflowBackdropCard"><div class="cardBox">Mov</div></div>
+							<div class="card overflowBackdropCard"><div class="cardBox">TV</div></div>
+							<div class="card overflowBackdropCard"><div class="cardBox">合集</div></div>
+							<div class="card overflowBackdropCard"><div class="cardBox">Course</div></div>
+							<div class="card overflowBackdropCard"><div class="cardBox">Music</div></div>
+							<div class="card overflowBackdropCard"><div class="cardBox">MV</div></div>
+							<div class="card overflowBackdropCard"><div class="cardBox">文件夹</div></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<pre id="result">PENDING</pre>
+		<script>
+			addEventListener("load", () => requestAnimationFrame(() => {
+				const items = document.querySelector(".section0 .itemsContainer");
+				const container = items.getBoundingClientRect();
+				const cards = [...items.children].map((card) => card.getBoundingClientRect());
+				const firstTop = cards[0].top;
+				const firstRow = cards.filter((card) => Math.abs(card.top - firstTop) < 2);
+				const remaining = Math.round(container.right - Math.max(...firstRow.map((card) => card.right)));
+				const expectedColumns = innerWidth < 560
+					? 1
+					: innerWidth < 800
+						? 2
+						: innerWidth < 1200
+							? 3
+							: 4;
+				const metrics = {
+					viewport: [innerWidth, innerHeight],
+					display: getComputedStyle(items).display,
+					columns: firstRow.length,
+					containerWidth: Math.round(container.width),
+					cardWidth: Math.round(firstRow[0].width),
+					remaining,
+				};
+				const pass = metrics.display === "grid"
+					&& metrics.columns === expectedColumns
+					&& metrics.remaining <= 2;
+				document.querySelector("#result").textContent = `${pass ? "PASS" : "FAIL"} ${JSON.stringify(metrics)}`;
+			}));
+		</script>
+	</body>
+</html>
