@@ -164,4 +164,25 @@ requireDeclaration(
 	"0!important",
 );
 
+const seasonSelector = '#itemDetailPage:has(#listChildrenCollapsible:not(.hide) .listItem[data-type=Episode])';
+requireDeclaration(
+	css,
+	`${seasonSelector} .detailPagePrimaryContainer`,
+	"grid-template-areas",
+	'"poster name" "poster info" "poster summary" "poster details" "buttons buttons" "episodes episodes"',
+);
+requireDeclaration(
+	css,
+	`${seasonSelector} .detailPagePrimaryContainer #listChildrenCollapsible`,
+	"grid-area",
+	"episodes",
+);
+const seasonItem = `${seasonSelector} #childrenContent .itemsContainer.vertical-list>.listItem[data-type=Episode]`;
+requireDeclaration(css, `${seasonItem} .listItem-content`, "grid-template-columns", "clamp(9rem,18vw,16rem) minmax(0,1fr) auto");
+requireDeclaration(css, `${seasonItem} .listItemImage-large`, "aspect-ratio", "16/9");
+requireDeclaration(css, `${seasonItem} .listItem-bottomoverview`, "display", "none!important");
+const seasonPhone = mediaBodies("(max-width:40em)").find(body => body.includes(`${seasonSelector} .detailPagePrimaryContainer{`));
+if (!seasonPhone) throw new Error("Missing the phone season layout");
+requireDeclaration(seasonPhone, `${seasonItem} .listItem-content`, "grid-template-areas", '"image body" "actions actions"');
+
 console.log("Responsive detail-page CSS contract passed");
