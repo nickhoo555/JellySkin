@@ -1,0 +1,87 @@
+<!doctype html>
+<html class="layout-desktop" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Season detail regression</title>
+  <style>
+    /* Minimal Jellyfin 10.11 core rules: the new content wrapper and viewport-sized thumbnail. */
+    html, body { margin: 0; font: 14.88px sans-serif; }
+    .hide { display: none !important; }
+    .layout-mobile .hide-mobile { display: none !important; }
+    .layout-desktop .hide-desktop { display: none !important; }
+    .detailImageContainer .card { aspect-ratio: 2 / 3; background: #516070; }
+    .listItem, .listItemBody, .listItemMediaInfo { contain: layout style; display: flex; }
+    .listItem { align-items: center; overflow: hidden; padding: .25em .25em .25em .5em; }
+    .listItem-withContentWrapper { align-items: flex-start; flex-direction: column; }
+    .listItem-content { display: flex; align-items: center; width: 100%; }
+    .listItemBody { flex-grow: 1; overflow: hidden; padding: .85em .75em; }
+    .listItemBodyText { overflow: hidden; padding: .1em 0; }
+    .listItemImage { flex-shrink: 0; background: #516070; }
+    .listItemImage-large { height: 13vw; width: 19.5vw; margin-right: .75em; }
+    .listViewUserDataButtons { display: flex; align-items: center; }
+    .paper-icon-button-light { flex-shrink: 0; padding: .556em; border: 0; background: transparent; color: inherit; font: inherit; }
+    .paper-icon-button-light .material-icons { font: inherit; font-size: 1.66957em; }
+    .listItem .endsAt, .listItem-overview, .listItem-bottomoverview { display: none !important; }
+    .itemDetailsGroup { padding: 1rem 0; }
+    #result { position: fixed; inset: auto 0 0; background: #fff; color: #000; z-index: 9; margin: 0; font: 12px monospace; }
+  </style>
+  <link rel="stylesheet" href="../dist/main.css" />
+</head>
+<body>
+  <div id="itemDetailPage">
+    <div class="detailPageWrapperContainer">
+      <div class="detailPagePrimaryContainer">
+        <div class="detailImageContainer hide-mobile"><div class="card portraitCard"></div></div>
+        <div class="detailRibbon">
+          <div class="infoWrapper">
+            <div class="detailImageContainer hide-desktop"><div class="card portraitCard"></div></div>
+            <div class="nameContainer"><h1 class="parentName"><a data-type="Series">凡人修仙传</a></h1><h3 class="itemName subtitle">凡人修仙传：风起天南</h3></div>
+            <div class="itemMiscInfo itemMiscInfo-primary">★ 7.9</div>
+          </div>
+          <div class="mainDetailButtons"><button class="emby-button" data-action="play" title="播放">播放</button><button class="emby-button">随机</button></div>
+        </div>
+        <div class="detailPagePrimaryContent padded-right">
+          <div class="detailSection">
+            <form class="trackSelections hide"></form>
+            <div class="recordingFields hide"></div>
+            <div class="detailSectionContent"><p class="overview">平凡少年韩立出生贫困，为了让家人过上更好的生活，自愿前去七玄门参加入门考核，最终被墨大夫收入门下。墨大夫试图夺舍韩立，最终却被韩立反杀。韩立得知了一个全新世界：修仙界的存在。</p><div class="itemExternalLinks">Douban，TMDB</div></div>
+            <div class="itemDetailsGroup">类型：动画、奇幻、武侠<br />导演：伍镇焯、王裕仁</div>
+            <div id="listChildrenCollapsible" class="verticalSection detailVerticalSection verticalSection-extrabottompadding">
+              <div id="childrenContent"><div class="itemsContainer padded-right vertical-list"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detailPageSecondaryContainer">演职人员</div>
+    </div>
+  </div>
+  <pre id="result">PENDING</pre>
+  <script>
+    const params = new URLSearchParams(location.search);
+    document.documentElement.className = params.get('layout') === 'mobile' ? 'layout-mobile' : 'layout-desktop';
+    if (params.has('legacy')) document.querySelector('#childrenContent .itemsContainer').classList.add('childrenItemsContainer');
+    const overview = '韩立出生于贫困家庭，家中有父母和一个小妹。为减轻家里负担，自愿去参加七玄门的入门考核。路上结识到好友张铁，但是入门考核并不那么容易。';
+    document.querySelector('#childrenContent .itemsContainer').innerHTML = [1, 2].map(n => `
+      <div class="listItem listItem-largeImage listItem-withContentWrapper" data-type="Episode" data-action="none">
+        <div class="listItem-content">
+          <div class="listItemImage listItemImage-large"></div>
+          <div class="listItemBody itemAction"><div class="listItemBodyText">${n}. 00${n}</div><div class="secondary listItemMediaInfo listItemBodyText"><div class="mediaInfoItem">20m</div><div class="mediaInfoItem">★ 10.0</div><div class="endsAt">结束于 0:03</div></div><div class="secondary listItem-overview listItemBodyText"><bdi><p>${overview}</p></bdi></div></div>
+          <div class="listViewUserDataButtons">${['ⓘ','✓','♥','⋮'].map(label => `<button class="listItemButton paper-icon-button-light"><span class="material-icons">${label}</span></button>`).join('')}</div>
+        </div><div class="listItem-bottomoverview secondary"><bdi>${overview}</bdi></div>
+      </div>`).join('');
+    addEventListener('load', () => requestAnimationFrame(() => {
+      const box = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return { x:r.x, y:r.y, w:r.width, h:r.height, right:r.right, bottom:r.bottom }; };
+      const metrics = {viewport:innerWidth, container:box('.detailPagePrimaryContainer'), synopsis:box('.detailSectionContent'), details:box('.itemDetailsGroup'), list:box('#listChildrenCollapsible'), item:box('.listItem'), body:box('.listItemBody'), image:box('.listItemImage'), actions:box('.listViewUserDataButtons')};
+      const failures = [];
+      if (metrics.list.w < metrics.container.w - 2) failures.push('episode list not full width');
+      if (metrics.list.y < metrics.details.bottom - 1 || metrics.list.y < metrics.synopsis.bottom - 1) failures.push('episode list competes with synopsis/metadata');
+      if (metrics.body.w < Math.min(160, innerWidth * .4)) failures.push('episode text squeezed');
+      if (metrics.item.h > 320) failures.push('episode row too tall');
+      if (metrics.image.right > metrics.item.right + 1 || metrics.actions.right > metrics.item.right + 1) failures.push('thumbnail/actions overflow');
+      if (document.documentElement.scrollWidth > innerWidth + 1) failures.push('page horizontal overflow');
+      document.querySelector('#result').textContent = `${failures.length ? 'FAIL' : 'PASS'} ${JSON.stringify({failures,metrics})}`;
+    }));
+  </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+// Season pages contain a long episode list, not a track selector. Compose the
+// hero and the list at the page grid rather than auto-placing episodes into the
+// selector column. Scope by the actual content so movie/episode pages and music
+// lists keep their own layouts. Jellyfin 10.11 no longer emits
+// `.childrenItemsContainer` on this list.
+#itemDetailPage:has(#listChildrenCollapsible:not(.hide) .listItem[data-type="Episode"]) {
+	.detailPagePrimaryContainer {
+		display: grid;
+		grid-template-columns: var(--card-width) minmax(0, 1fr);
+		grid-template-areas:
+			"poster name"
+			"poster info"
+			"poster summary"
+			"poster details"
+			"buttons buttons"
+			"episodes episodes";
+		grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
+		column-gap: clamp(1.25rem, 4vw, 2rem);
+		row-gap: 1rem;
+		align-items: start;
+		width: 100%;
+		min-width: 0;
+
+		// Both desktop (sibling poster) and touch (nested poster) DOMs share the
+		// same named grid slots; flatten only the season's structural wrappers.
+		> .detailRibbon,
+		> .detailRibbon > .infoWrapper,
+		> .detailPagePrimaryContent,
+		> .detailPagePrimaryContent > .detailSection {
+			display: contents;
+		}
+
+		.detailImageContainer {
+			grid-area: poster;
+			align-self: start;
+		}
+
+		.nameContainer {
+			grid-area: name;
+			align-self: start;
+			justify-self: stretch;
+			width: 100%;
+			min-width: 0;
+		}
+
+		.itemMiscInfo-primary {
+			grid-area: info;
+			align-self: start;
+			justify-self: stretch;
+			width: 100%;
+		}
+
+		.detailSectionContent {
+			grid-area: summary;
+			min-width: 0;
+			width: 100%;
+		}
+
+		.itemDetailsGroup {
+			grid-area: details;
+			min-width: 0;
+			width: 100%;
+		}
+
+		.mainDetailButtons {
+			grid-area: buttons;
+		}
+
+		#listChildrenCollapsible {
+			grid-area: episodes;
+			min-width: 0;
+			width: 100%;
+		}
+	}
+
+	#childrenContent .itemsContainer.vertical-list {
+		padding: 0 !important;
+		width: 100%;
+		min-width: 0;
+
+		> .listItem[data-type="Episode"] {
+			width: 100%;
+			box-sizing: border-box;
+			padding: 0.75rem 0;
+			margin: 0 !important;
+			border-bottom: 1px solid rgb(255 255 255 / 0.12);
+
+			.listItem-content {
+				display: grid;
+				grid-template-columns: clamp(9rem, 18vw, 16rem) minmax(0, 1fr) auto;
+				grid-template-areas: "image body actions";
+				gap: 1rem;
+				align-items: center;
+				min-width: 0;
+				width: 100%;
+			}
+
+			.listItemImage-large {
+				grid-area: image;
+				width: 100%;
+				height: auto;
+				min-width: 0;
+				min-height: 0;
+				aspect-ratio: 16 / 9;
+				margin: 0 !important;
+				border-radius: 0.5rem;
+			}
+
+			.listItemBody {
+				grid-area: body;
+				display: block;
+				padding: 0;
+				min-width: 0;
+			}
+
+			.listItemBodyText {
+				white-space: normal;
+				overflow-wrap: anywhere;
+			}
+
+			.listItemMediaInfo {
+				display: flex;
+				flex-wrap: wrap;
+				margin: 0.35rem 0;
+			}
+
+			.listItem-overview {
+				display: -webkit-box !important;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3;
+				overflow: hidden;
+				line-height: 1.5;
+
+				p {
+					margin: 0;
+				}
+			}
+
+			// Jellyfin can render the overview in both positions. Keep one copy.
+			.listItem-bottomoverview {
+				display: none !important;
+			}
+
+			.listViewUserDataButtons {
+				grid-area: actions;
+				display: flex;
+				justify-content: flex-end;
+
+				.listItemButton {
+					min-width: 2.75rem;
+					min-height: 2.75rem;
+					margin: 0;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 40em) {
+		.detailPagePrimaryContainer {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-areas:
+				"poster"
+				"name"
+				"info"
+				"buttons"
+				"summary"
+				"details"
+				"episodes";
+			grid-template-rows: repeat(7, auto);
+
+			.detailImageContainer {
+				justify-self: center;
+			}
+		}
+
+		#childrenContent .itemsContainer.vertical-list > .listItem[data-type="Episode"] {
+			.listItem-content {
+				grid-template-columns: clamp(6rem, 28vw, 9rem) minmax(0, 1fr);
+				grid-template-areas: "image body" "actions actions";
+				gap: 0.5rem 0.75rem;
+			}
+
+			.listItem-overview {
+				-webkit-line-clamp: 2;
+			}
+		}
+	}
+}
